@@ -1236,6 +1236,16 @@ func (client *Client) Hgetall(key string, val interface{}) os.Error {
     return nil
 }
 
+// eset commands
+func (client *Client) Eadd(key string, value []byte, expiration float64) (bool, os.Error) {
+    res, err := client.sendCommand("EADD", []string{key, strconv.Ftoa64(expiration, 'f', -1), string(value)})
+    if err != nil {
+        return false, err
+    }
+
+    return res.(int64) == 1, nil
+}
+
 //Server commands
 
 func (client *Client) Save() os.Error {
